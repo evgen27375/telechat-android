@@ -13781,7 +13781,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             final boolean proxyVisible = proxyEnabled && !TextUtils.isEmpty(proxyAddress)
                     || getMessagesController().blockedCountry && !SharedConfig.proxyList.isEmpty();
 
-            if (proxyVisible) {
+            // TELECHAT: пункт «Прокси» скрыт из меню — встроенный прокси всегда включён
+            if (false && proxyVisible) {
                 io.addGap();
                 io.add(proxyMenuSubItem);
             }

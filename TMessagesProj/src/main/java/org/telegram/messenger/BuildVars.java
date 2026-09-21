@@ -28,8 +28,8 @@ public class BuildVars {
 
     // TELECHAT: свои api_id/api_hash с my.telegram.org берутся из local.properties (BuildConfig).
     // Если не заданы (0/пусто) — используются тестовые ключи Telegram (ограничены, только для сборки/отладки).
-    public static int APP_ID = BuildConfig.TELECHAT_APP_ID != 0 ? BuildConfig.TELECHAT_APP_ID : 4;
-    public static String APP_HASH = !BuildConfig.TELECHAT_APP_HASH.isEmpty() ? BuildConfig.TELECHAT_APP_HASH : "014b35b6184100b085b0d0572f9b5103";
+    public static int APP_ID = BuildConfig.TELECHAT_APP_ID != 0 ? BuildConfig.TELECHAT_APP_ID : 2040;
+    public static String APP_HASH = !BuildConfig.TELECHAT_APP_HASH.isEmpty() ? BuildConfig.TELECHAT_APP_HASH : "b18441a1ff607e10a989891a5462e627";
 
     // SafetyNet key for Google Identity SDK, set it to empty to disable
     public static String SAFETYNET_KEY = "AIzaSyDqt8P-7F7CPCseMkOiVRgb1LY8RN1bvH8";

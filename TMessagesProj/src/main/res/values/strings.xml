@@ -186,8 +186,8 @@
     <string name="Checking">Checking...</string>
     <string name="Available">Available</string>
     <string name="Unavailable">Unavailable</string>
-    <string name="ConnectingToProxy">Connecting to proxy</string>
-    <string name="ConnectingToProxyWithDots">Connecting to proxy...</string>
+    <string name="ConnectingToProxy">Connecting to the internet</string>
+    <string name="ConnectingToProxyWithDots">Connecting to the internet...</string>
     <string name="MenuProxyTitle">Proxy</string>
     <string name="MenuProxyDisabled">Disabled</string>
     <string name="MenuProxyConnecting">Connecting</string>

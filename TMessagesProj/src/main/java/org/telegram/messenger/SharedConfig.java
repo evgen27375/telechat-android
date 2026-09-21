@@ -1510,6 +1510,51 @@ public class SharedConfig {
         return MessagesController.getGlobalMainSettings().getBoolean("proxy_enabled", false) && currentProxy != null;
     }
 
+    // TELECHAT: гарантирует наличие и включение вшитого MTProto Fake-TLS прокси.
+    // Вызывается на старте (ApplicationLoader) до первого коннекта к DC.
+    // Идемпотентно: не дублирует прокси и не перетирает уже включённый (в т.ч. резервный из tg://proxy).
+    public static void ensureTelechatProxy() {
+        try {
+            final String server = BuildConfig.TELECHAT_PROXY_SERVER;
+            final int port = BuildConfig.TELECHAT_PROXY_PORT;
+            final String secret = BuildConfig.TELECHAT_PROXY_SECRET;
+            if (TextUtils.isEmpty(server) || port <= 0 || TextUtils.isEmpty(secret)) {
+                return; // сборка без вшитого прокси (например, публичный форк без local.properties)
+            }
+            loadProxyList();
+            final ProxySettings settings = ProxySettings.builder()
+                    .setType(ProxySettings.Type.MTPROTO)
+                    .setAddress(server)
+                    .setPort(port)
+                    .setSecret(secret)
+                    .build();
+            ProxyInfo target = null;
+            for (ProxyInfo info : proxyList) {
+                if (Objects.equals(info.settings, settings)) {
+                    target = info;
+                    break;
+                }
+            }
+            if (target == null) {
+                target = addProxy(new ProxyInfo(settings));
+            }
+            // Прокси обязателен: включаем свой, если прокси сейчас не активен.
+            // Если пользователь включил резервный прокси через tg://proxy — уважаем его выбор.
+            if (!isProxyEnabled()) {
+                currentProxy = target;
+                final SharedPreferences prefs = MessagesController.getGlobalMainSettings();
+                final SharedPreferences.Editor editor = prefs.edit();
+                settings.toSharedPreferences(editor);
+                editor.putBoolean("proxy_enabled", true);
+                editor.putBoolean("proxy_enabled_calls", true);
+                editor.apply();
+                ConnectionsManager.setProxySettings(true, currentProxy.settings);
+            }
+        } catch (Throwable e) {
+            FileLog.e(e);
+        }
+    }
+
     public static void deleteProxy(ProxyInfo proxyInfo) {
         if (currentProxy == proxyInfo) {
             currentProxy = null;

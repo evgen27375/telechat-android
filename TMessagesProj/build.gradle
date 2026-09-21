@@ -146,6 +146,19 @@ android {
 
         multiDexEnabled true
 
+        // --- TELECHAT: встроенный прокси и api-ключи из local.properties (не в git) ---
+        def _tcProxyServer = getProps("TELECHAT_PROXY_SERVER")
+        def _tcProxySecret = getProps("TELECHAT_PROXY_SECRET")
+        def _tcProxyPort   = getProps("TELECHAT_PROXY_PORT")
+        def _tcAppId       = getProps("TELECHAT_APP_ID")
+        def _tcAppHash     = getProps("TELECHAT_APP_HASH")
+        def _intOrZero = { v -> (v == null || v.toString().trim().isEmpty()) ? "0" : v.toString().trim() }
+        buildConfigField "String", "TELECHAT_PROXY_SERVER", "\"" + (_tcProxyServer ?: "") + "\""
+        buildConfigField "String", "TELECHAT_PROXY_SECRET", "\"" + (_tcProxySecret ?: "") + "\""
+        buildConfigField "int",    "TELECHAT_PROXY_PORT",   _intOrZero(_tcProxyPort)
+        buildConfigField "int",    "TELECHAT_APP_ID",       _intOrZero(_tcAppId)
+        buildConfigField "String", "TELECHAT_APP_HASH",     "\"" + (_tcAppHash ?: "") + "\""
+
         externalNativeBuild {
             cmake {
                 version '3.22.1'
